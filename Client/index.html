@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GamePlan - Sports Club Management</title>
+        <link rel="stylesheet" href="CSS/index.css" />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-content">
+                <div class="logo">
+                    <i class="fas fa-gamepad"></i>
+                    <h1>GamePlan</h1>
+                </div>
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+                <p class="loading-text">Checking authentication...</p>
+            </div>
+        </div>
+
+        <!-- Main Dashboard (shown only if authenticated) -->
+        <div class="dashboard" id="dashboard" style="display: none">
+            <header class="main-header">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-gamepad"></i>
+                        <h1>GamePlan</h1>
+                    </div>
+                    <nav class="main-nav">
+                        <ul>
+                            <li><a href="#dashboard">Dashboard</a></li>
+                            <li><a href="#training">Training</a></li>
+                            <li><a href="#matches">Matches</a></li>
+                            <li><a href="#finances">Finances</a></li>
+                            <li><a href="#team">Team</a></li>
+                        </ul>
+                    </nav>
+                    <div class="user-menu">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <button class="logout-btn" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="welcome-section">
+                    <h2>Welcome back!</h2>
+                    <p>Manage your sports club efficiently</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Training Sessions</h3>
+                            <p>Schedule and manage training sessions</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Matches</h3>
+                            <p>Track fixtures and results</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Team Management</h3>
+                            <p>Manage players and staff</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Statistics</h3>
+                            <p>View performance analytics</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Finances</h3>
+                            <p>Track income and expenses</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Communications</h3>
+                            <p>Send announcements and notifications</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script src="JS/index.js"></script>
+    </body>
+</html>

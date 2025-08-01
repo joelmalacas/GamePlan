@@ -1,0 +1,91 @@
+GAMEPLAN DATABASE - MAIN RELATIONSHIPS
+====================================
+
+CORE ENTITIES:
+=============
+🧑 users (authentication)
+🏟️ clubs (sports organizations)
+👥 club_members (users in clubs)
+🎯 club_roles (positions/roles)
+
+USER & CLUB RELATIONSHIPS:
+=========================
+users ←→ club_members ←→ clubs
+       ↑
+   club_roles
+
+users (1) ←→ (M) club_members (M) ←→ (1) clubs
+club_members (M) ←→ (1) club_roles
+
+TRAINING SYSTEM:
+===============
+clubs (1) ←→ (M) training_sessions
+training_sessions (M) ←→ (M) club_members [via training_attendance]
+
+training_sessions ←→ training_attendance ←→ club_members
+
+MATCH SYSTEM:
+============
+clubs (1) ←→ (M) matches [as home_club]
+clubs (1) ←→ (M) matches [as away_club]
+matches (M) ←→ (1) competitions
+matches (M) ←→ (M) club_members [via match_squads]
+
+matches ←→ match_squads ←→ club_members
+matches ←→ match_events ←→ club_members
+
+FINANCIAL SYSTEM:
+================
+clubs (1) ←→ (M) financial_transactions
+financial_categories (1) ←→ (M) financial_transactions
+club_members (1) ←→ (M) member_payments
+clubs (1) ←→ (M) member_payments
+
+STATISTICS:
+==========
+club_members (1) ←→ (M) player_statistics [by season]
+clubs (1) ←→ (M) club_statistics [by season/competition]
+
+COMMUNICATIONS:
+==============
+clubs (1) ←→ (M) announcements
+users (1) ←→ (M) notifications
+clubs (1) ←→ (M) notifications
+
+MEDICAL:
+=======
+club_members (1) ←→ (M) medical_records
+
+MAIN FOREIGN KEYS:
+=================
+club_members.user_id → users.id
+club_members.club_id → clubs.id
+club_members.role_id → club_roles.id
+training_sessions.club_id → clubs.id
+training_attendance.training_session_id → training_sessions.id
+training_attendance.member_id → club_members.id
+matches.home_club_id → clubs.id
+matches.away_club_id → clubs.id
+matches.competition_id → competitions.id
+match_squads.match_id → matches.id
+match_squads.member_id → club_members.id
+financial_transactions.club_id → clubs.id
+financial_transactions.category_id → financial_categories.id
+member_payments.club_id → clubs.id
+member_payments.member_id → club_members.id
+player_statistics.member_id → club_members.id
+club_statistics.club_id → clubs.id
+medical_records.member_id → club_members.id
+notifications.user_id → users.id
+announcements.club_id → clubs.id
+
+TABLE CATEGORIES BY COLOR:
+=========================
+🟢 USERS & AUTH: users, user_sessions
+🔵 CLUBS: clubs, club_roles, club_members, club_invitations
+🟠 TRAINING: training_sessions, training_attendance, training_exercises
+🟡 MATCHES: competitions, matches, match_squads, match_events
+🟣 FINANCE: financial_categories, financial_transactions, member_payments
+🔴 COMMUNICATION: announcements, notifications
+📊 STATS: player_statistics, club_statistics
+🏥 MEDICAL: medical_records

@@ -1,0 +1,177 @@
+<mxfile host="app.diagrams.net" modified="2024-08-01T19:30:00.000Z" agent="5.0" etag="xxx" version="21.6.5" type="device">
+  <diagram name="GamePlan Database Schema" id="gameplan-db">
+    <mxGraphModel dx="2074" dy="1194" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2339" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- USERS TABLE -->
+        <mxCell id="users-table" value="users" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="50" y="50" width="280" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="users-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="users-table">
+          <mxGeometry y="30" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="users-fields" value="first_name VARCHAR(100)&#xa;last_name VARCHAR(100)&#xa;email VARCHAR(255) UNIQUE&#xa;password_hash VARCHAR(255)&#xa;birth_date DATE&#xa;country VARCHAR(3)&#xa;phone VARCHAR(20)&#xa;profile_picture_url TEXT&#xa;is_email_verified BOOLEAN&#xa;email_verification_token VARCHAR(255)&#xa;password_reset_token VARCHAR(255)&#xa;password_reset_expires TIMESTAMP&#xa;last_login TIMESTAMP&#xa;is_active BOOLEAN&#xa;created_at TIMESTAMP&#xa;updated_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="users-table">
+          <mxGeometry y="56" width="280" height="264" as="geometry" />
+        </mxCell>
+
+        <!-- USER SESSIONS TABLE -->
+        <mxCell id="sessions-table" value="user_sessions" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="400" y="50" width="280" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="sessions-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="sessions-table">
+          <mxGeometry y="30" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="sessions-fk" value="🔗 user_id UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="sessions-table">
+          <mxGeometry y="56" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="sessions-fields" value="session_token VARCHAR(255) UNIQUE&#xa;expires_at TIMESTAMP&#xa;created_at TIMESTAMP&#xa;ip_address INET&#xa;user_agent TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="sessions-table">
+          <mxGeometry y="82" width="280" height="68" as="geometry" />
+        </mxCell>
+
+        <!-- CLUBS TABLE -->
+        <mxCell id="clubs-table" value="clubs" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="800" y="50" width="300" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="clubs-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="clubs-table">
+          <mxGeometry y="30" width="300" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="clubs-fields" value="name VARCHAR(200)&#xa;slug VARCHAR(100) UNIQUE&#xa;description TEXT&#xa;founded_year INTEGER&#xa;logo_url TEXT&#xa;cover_image_url TEXT&#xa;colors JSONB&#xa;address TEXT&#xa;city VARCHAR(100)&#xa;country VARCHAR(3)&#xa;postal_code VARCHAR(20)&#xa;phone VARCHAR(20)&#xa;email VARCHAR(255)&#xa;website_url TEXT&#xa;social_media JSONB&#xa;sport_type VARCHAR(50)&#xa;division VARCHAR(100)&#xa;subscription_plan VARCHAR(50)&#xa;subscription_expires TIMESTAMP&#xa;is_active BOOLEAN&#xa;created_at TIMESTAMP&#xa;updated_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="clubs-table">
+          <mxGeometry y="56" width="300" height="344" as="geometry" />
+        </mxCell>
+
+        <!-- CLUB ROLES TABLE -->
+        <mxCell id="roles-table" value="club_roles" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="50" width="280" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="roles-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="roles-table">
+          <mxGeometry y="30" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="roles-fields" value="name VARCHAR(100)&#xa;category VARCHAR(50)&#xa;description TEXT&#xa;permissions JSONB&#xa;is_system_role BOOLEAN&#xa;created_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="roles-table">
+          <mxGeometry y="56" width="280" height="124" as="geometry" />
+        </mxCell>
+
+        <!-- CLUB MEMBERS TABLE -->
+        <mxCell id="members-table" value="club_members" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="400" y="250" width="280" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="members-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="members-table">
+          <mxGeometry y="30" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="members-fks" value="🔗 user_id UUID (FK)&#xa;🔗 club_id UUID (FK)&#xa;🔗 role_id UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="members-table">
+          <mxGeometry y="56" width="280" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="members-fields" value="jersey_number INTEGER&#xa;position VARCHAR(50)&#xa;weekly_salary DECIMAL(10,2)&#xa;contract_start DATE&#xa;contract_end DATE&#xa;is_active BOOLEAN&#xa;joined_at TIMESTAMP&#xa;updated_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="members-table">
+          <mxGeometry y="108" width="280" height="122" as="geometry" />
+        </mxCell>
+
+        <!-- TRAINING SESSIONS TABLE -->
+        <mxCell id="training-table" value="training_sessions" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="50" y="500" width="300" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="training-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="training-table">
+          <mxGeometry y="30" width="300" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="training-fks" value="🔗 club_id UUID (FK)&#xa;🔗 created_by UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="training-table">
+          <mxGeometry y="56" width="300" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="training-fields" value="title VARCHAR(200)&#xa;description TEXT&#xa;training_type VARCHAR(50)&#xa;location VARCHAR(200)&#xa;date DATE&#xa;start_time TIME&#xa;end_time TIME&#xa;is_mandatory BOOLEAN&#xa;equipment_needed TEXT[]&#xa;notes TEXT&#xa;weather_conditions VARCHAR(100)&#xa;status VARCHAR(20)&#xa;created_at TIMESTAMP&#xa;updated_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="training-table">
+          <mxGeometry y="92" width="300" height="208" as="geometry" />
+        </mxCell>
+
+        <!-- TRAINING ATTENDANCE TABLE -->
+        <mxCell id="attendance-table" value="training_attendance" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="400" y="550" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="attendance-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="attendance-table">
+          <mxGeometry y="30" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="attendance-fks" value="🔗 training_session_id UUID (FK)&#xa;🔗 member_id UUID (FK)&#xa;🔗 recorded_by UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="attendance-table">
+          <mxGeometry y="56" width="280" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="attendance-fields" value="status VARCHAR(20)&#xa;arrival_time TIME&#xa;excuse_reason TEXT&#xa;notes TEXT&#xa;recorded_at TIMESTAMP&#xa;created_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="attendance-table">
+          <mxGeometry y="108" width="280" height="92" as="geometry" />
+        </mxCell>
+
+        <!-- MATCHES TABLE -->
+        <mxCell id="matches-table" value="matches" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="800" y="500" width="300" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="matches-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="matches-table">
+          <mxGeometry y="30" width="300" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="matches-fks" value="🔗 competition_id UUID (FK)&#xa;🔗 home_club_id UUID (FK)&#xa;🔗 away_club_id UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="matches-table">
+          <mxGeometry y="56" width="300" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="matches-fields" value="match_date TIMESTAMP&#xa;venue VARCHAR(200)&#xa;round VARCHAR(50)&#xa;home_score INTEGER&#xa;away_score INTEGER&#xa;status VARCHAR(20)&#xa;referee_name VARCHAR(100)&#xa;attendance INTEGER&#xa;notes TEXT&#xa;created_at TIMESTAMP&#xa;updated_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="matches-table">
+          <mxGeometry y="108" width="300" height="172" as="geometry" />
+        </mxCell>
+
+        <!-- COMPETITIONS TABLE -->
+        <mxCell id="competitions-table" value="competitions" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="500" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="competitions-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="competitions-table">
+          <mxGeometry y="30" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="competitions-fields" value="name VARCHAR(200)&#xa;season VARCHAR(20)&#xa;competition_type VARCHAR(50)&#xa;country VARCHAR(3)&#xa;division VARCHAR(100)&#xa;start_date DATE&#xa;end_date DATE&#xa;is_active BOOLEAN&#xa;created_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="competitions-table">
+          <mxGeometry y="56" width="280" height="144" as="geometry" />
+        </mxCell>
+
+        <!-- FINANCIAL TRANSACTIONS TABLE -->
+        <mxCell id="financial-table" value="financial_transactions" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="50" y="850" width="300" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="financial-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="financial-table">
+          <mxGeometry y="30" width="300" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="financial-fks" value="🔗 club_id UUID (FK)&#xa;🔗 category_id UUID (FK)&#xa;🔗 member_id UUID (FK)&#xa;🔗 created_by UUID (FK)&#xa;🔗 approved_by UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="financial-table">
+          <mxGeometry y="56" width="300" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="financial-fields" value="description VARCHAR(500)&#xa;amount DECIMAL(12,2)&#xa;transaction_type VARCHAR(20)&#xa;transaction_date DATE&#xa;payment_method VARCHAR(50)&#xa;reference_number VARCHAR(100)&#xa;receipt_url TEXT&#xa;is_recurring BOOLEAN&#xa;recurring_frequency VARCHAR(20)&#xa;next_occurrence DATE&#xa;status VARCHAR(20)&#xa;created_at TIMESTAMP&#xa;updated_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="financial-table">
+          <mxGeometry y="140" width="300" height="210" as="geometry" />
+        </mxCell>
+
+        <!-- FINANCIAL CATEGORIES TABLE -->
+        <mxCell id="categories-table" value="financial_categories" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="400" y="850" width="280" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="categories-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="categories-table">
+          <mxGeometry y="30" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="categories-fields" value="name VARCHAR(100)&#xa;type VARCHAR(20)&#xa;description TEXT&#xa;is_system_category BOOLEAN&#xa;created_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="categories-table">
+          <mxGeometry y="56" width="280" height="94" as="geometry" />
+        </mxCell>
+
+        <!-- NOTIFICATIONS TABLE -->
+        <mxCell id="notifications-table" value="notifications" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="800" y="850" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="notifications-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="notifications-table">
+          <mxGeometry y="30" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="notifications-fks" value="🔗 user_id UUID (FK)&#xa;🔗 club_id UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="notifications-table">
+          <mxGeometry y="56" width="280" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="notifications-fields" value="type VARCHAR(50)&#xa;title VARCHAR(200)&#xa;message TEXT&#xa;data JSONB&#xa;is_read BOOLEAN&#xa;created_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="notifications-table">
+          <mxGeometry y="92" width="280" height="108" as="geometry" />
+        </mxCell>
+
+        <!-- PLAYER STATISTICS TABLE -->
+        <mxCell id="stats-table" value="player_statistics" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="850" width="280" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="stats-pk" value="🔑 id UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" vertex="1" parent="stats-table">
+          <mxGeometry y="30" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="stats-fk" value="🔗 member_id UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="stats-table">
+          <mxGeometry y="56" width="280" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="stats-fields" value="season VARCHAR(20)&#xa;matches_played INTEGER&#xa;matches_started INTEGER&#xa;minutes_played INTEGER&#xa;goals INTEGER&#xa;assists INTEGER&#xa;yellow_cards INTEGER&#xa;red_cards INTEGER&#xa;clean_sheets INTEGER&#xa;saves INTEGER&#xa;training_attendance_rate DECIMAL&#xa;created_at TIMESTAMP&#xa;updated_at TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="stats-table">
+          <mxGeometry y="82" width="280" height="168" as="geometry" />
+        </mxCell>
+
+        <!-- MEDICAL RECORDS TABLE -->
+        <mxCell id="medical-table" value="medical_records" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="50"
