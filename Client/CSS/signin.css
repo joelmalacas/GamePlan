@@ -1,0 +1,800 @@
+/* Reset e configurações base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+}
+
+/* Fundo desportivo */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: brightness(0.3) blur(1px);
+    z-index: -2;
+}
+
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(30, 60, 114, 0.9) 0%,
+        rgba(42, 82, 152, 0.8) 50%,
+        rgba(74, 144, 226, 0.9) 100%
+    );
+    z-index: -1;
+}
+
+/* Container principal */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    position: relative;
+}
+
+/* Card de signin */
+.signin-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: slideInUp 0.8s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.signin-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #4a90e2, #7b68ee, #ff6b6b, #4ecdc4);
+    background-size: 400% 400%;
+    animation: gradientShift 3s ease infinite;
+}
+
+/* Seção do logo */
+.logo-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.logo i {
+    font-size: 2.5rem;
+    color: #4a90e2;
+    animation: pulse 2s infinite;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.logo i:hover {
+    color: #357abd;
+    transform: scale(1.15) rotate(5deg);
+    filter: drop-shadow(0 5px 15px rgba(74, 144, 226, 0.4));
+}
+
+.logo h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    background: linear-gradient(135deg, #4a90e2, #7b68ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.logo h1:hover {
+    background: linear-gradient(135deg, #357abd, #6b5ce8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transform: scale(1.05);
+    filter: drop-shadow(0 2px 8px rgba(74, 144, 226, 0.3));
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+/* Formulário */
+.signin-form {
+    width: 100%;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.input-container {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.input-container input,
+.input-container select {
+    width: 100%;
+    padding: 15px 50px 15px 50px;
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: "Poppins", sans-serif;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    color: #333;
+}
+
+.input-container input::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+.input-container select {
+    cursor: pointer;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.9)
+        url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")
+        no-repeat right 12px center;
+    background-size: 16px;
+    color: #333;
+}
+
+.input-container select option {
+    background: white;
+    color: #333;
+    padding: 10px;
+}
+
+.input-container input:focus,
+.input-container select:focus {
+    border-color: #4a90e2;
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(74, 144, 226, 0.15);
+    color: #333;
+}
+
+.input-container select:focus {
+    background: white
+        url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")
+        no-repeat right 12px center;
+    background-size: 16px;
+    color: #333;
+}
+
+.input-container input[type="date"] {
+    color: #333;
+}
+
+.input-container input[type="date"]:focus,
+.input-container input[type="date"]:valid {
+    color: #333;
+}
+
+.input-container input[type="date"]::-webkit-datetime-edit-text,
+.input-container input[type="date"]::-webkit-datetime-edit-month-field,
+.input-container input[type="date"]::-webkit-datetime-edit-day-field,
+.input-container input[type="date"]::-webkit-datetime-edit-year-field {
+    color: #333;
+    font-weight: 500;
+}
+
+.input-container input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.input-container label {
+    position: absolute;
+    left: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 1rem;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    padding: 0 5px;
+}
+
+.input-container.focused label,
+.input-container input:focus + label,
+.input-container input:valid + label,
+.input-container select:focus + label,
+.input-container select:valid + label {
+    top: 0;
+    font-size: 0.85rem;
+    color: #4a90e2;
+    font-weight: 500;
+}
+
+.input-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 1.1rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-container.focused .input-icon,
+.input-container input:focus ~ .input-icon,
+.input-container select:focus ~ .input-icon {
+    color: #4a90e2;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+}
+
+.toggle-password:hover {
+    color: #4a90e2;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.input-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #4a90e2, #7b68ee);
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-container.focused .input-underline,
+.input-container input:focus ~ .input-underline,
+.input-container select:focus ~ .input-underline {
+    width: 100%;
+}
+
+/* Requisitos de password */
+.password-requirements {
+    background: rgba(248, 249, 250, 0.8);
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.password-requirements.show {
+    opacity: 1;
+    max-height: 200px;
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.requirement:last-child {
+    margin-bottom: 0;
+}
+
+.requirement i {
+    width: 16px;
+    height: 16px;
+    font-size: 0.8rem;
+    color: #e74c3c;
+    transition: all 0.3s ease;
+}
+
+.requirement.valid i {
+    color: #27ae60;
+    animation: checkmark 0.3s ease;
+}
+
+.requirement.valid {
+    color: #27ae60;
+}
+
+/* Validação de password match */
+.password-match {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #e74c3c;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.password-match.show {
+    opacity: 1;
+}
+
+.password-match.valid {
+    color: #27ae60;
+}
+
+.password-match i {
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+/* Opções do formulário */
+.form-options {
+    margin-bottom: 25px;
+}
+
+.terms-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.9rem;
+}
+
+.terms-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: #4a90e2;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.terms-checkbox input[type="checkbox"]:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+.terms-checkbox label {
+    color: #666;
+    cursor: pointer;
+    line-height: 1.5;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.terms-link {
+    color: #4a90e2;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.terms-link:hover {
+    color: #357abd;
+    text-decoration: underline;
+}
+
+/* Botão de signin */
+.signin-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4a90e2, #7b68ee);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.signin-btn:disabled {
+    background: linear-gradient(135deg, #ccc, #999);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.signin-btn:not(:disabled):hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(74, 144, 226, 0.5);
+    background: linear-gradient(135deg, #357abd, #6b5ce8);
+}
+
+.signin-btn:not(:disabled):active {
+    transform: translateY(-1px) scale(1.01);
+    transition: all 0.1s ease;
+}
+
+.signin-btn.loading {
+    pointer-events: none;
+}
+
+.btn-loader {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-loader.show {
+    opacity: 1;
+}
+
+/* Link de login */
+.login-link {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.login-link a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.login-link a:hover {
+    color: #357abd;
+    text-decoration: underline;
+    transform: translateY(-1px);
+}
+
+/* Elementos flutuantes */
+.floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floating-icon {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.1);
+    font-size: 2rem;
+    animation: float 6s ease-in-out infinite;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-icon:nth-child(1) {
+    top: 15%;
+    left: 8%;
+    animation-delay: 0s;
+}
+
+.floating-icon:nth-child(2) {
+    top: 70%;
+    right: 12%;
+    animation-delay: 2s;
+}
+
+.floating-icon:nth-child(3) {
+    bottom: 25%;
+    left: 12%;
+    animation-delay: 4s;
+}
+
+.floating-icon:nth-child(4) {
+    top: 35%;
+    right: 8%;
+    animation-delay: 1s;
+}
+
+.floating-icon:nth-child(5) {
+    top: 60%;
+    left: 5%;
+    animation-delay: 3s;
+}
+
+.floating-icon:nth-child(6) {
+    bottom: 40%;
+    right: 15%;
+    animation-delay: 5s;
+}
+
+/* Animações */
+@keyframes slideInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes checkmark {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .signin-card {
+        max-width: 500px;
+        padding: 30px 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 15px;
+    }
+
+    .signin-card {
+        padding: 25px 20px;
+        border-radius: 15px;
+    }
+
+    .logo h1 {
+        font-size: 1.8rem;
+    }
+
+    .logo i {
+        font-size: 2rem;
+    }
+
+    .form-row {
+        gap: 0;
+    }
+
+    .floating-icon {
+        font-size: 1.5rem;
+    }
+
+    .input-container input,
+    .input-container select {
+        padding: 12px 45px 12px 45px;
+        font-size: 0.95rem;
+    }
+
+    .input-container label {
+        left: 45px;
+    }
+
+    .input-icon {
+        left: 15px;
+    }
+
+    .toggle-password {
+        right: 15px;
+    }
+}
+
+@media (max-width: 360px) {
+    .signin-card {
+        padding: 20px 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+}
+
+/* Efeitos hover para dispositivos desktop */
+@media (hover: hover) {
+    .signin-card {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .signin-card:hover {
+        transform: translateY(-5px) scale(1.01);
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+    }
+
+    .floating-icon:hover {
+        color: rgba(74, 144, 226, 0.3);
+        transform: scale(1.2);
+        filter: drop-shadow(0 0 10px rgba(74, 144, 226, 0.5));
+    }
+}
+
+/* Melhorias de acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Animações adicionais para interações smooth */
+.form-group {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-group:hover {
+    transform: translateY(-1px);
+}
+
+/* Tema escuro (se preferido pelo sistema) */
+@media (prefers-color-scheme: dark) {
+    .signin-card {
+        background: rgba(30, 41, 59, 0.95);
+        color: #e2e8f0;
+    }
+
+    .logo h1 {
+        color: #e2e8f0;
+    }
+
+    .subtitle {
+        color: #94a3b8;
+    }
+
+    .input-container input,
+    .input-container select {
+        background: rgba(51, 65, 85, 0.8);
+        color: #e2e8f0;
+        border-color: #475569;
+    }
+
+    .input-container input:focus,
+    .input-container select:focus {
+        background: rgba(51, 65, 85, 1);
+        color: #e2e8f0;
+    }
+
+    .input-container input::placeholder {
+        color: #94a3b8;
+    }
+
+    .input-container input[type="date"]::-webkit-datetime-edit-text,
+    .input-container input[type="date"]::-webkit-datetime-edit-month-field,
+    .input-container input[type="date"]::-webkit-datetime-edit-day-field,
+    .input-container input[type="date"]::-webkit-datetime-edit-year-field {
+        color: #e2e8f0;
+    }
+
+    .input-container select {
+        background: rgba(51, 65, 85, 0.8)
+            url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23e2e8f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")
+            no-repeat right 12px center;
+        background-size: 16px;
+        color: #e2e8f0;
+    }
+
+    .input-container select option {
+        background: rgba(30, 41, 59, 1);
+        color: #e2e8f0;
+    }
+
+    .input-container select:focus {
+        background: rgba(51, 65, 85, 1)
+            url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23e2e8f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")
+            no-repeat right 12px center;
+        background-size: 16px;
+        color: #e2e8f0;
+    }
+
+    .input-container label {
+        color: #94a3b8;
+        background: rgba(30, 41, 59, 0.95);
+    }
+
+    .password-requirements {
+        background: rgba(51, 65, 85, 0.8);
+        border-color: #475569;
+    }
+
+    .terms-checkbox label {
+        color: #94a3b8;
+    }
+}
