@@ -52,6 +52,11 @@ GamePlan/
 - **Interactive Elements**: Micro-interactions on all UI components
 - **Sports Theme**: Athletic-inspired visual elements and backgrounds
 - **Professional UX**: Intuitive navigation and user experience
+- **Sports-management**
+- **Login-system**
+- **Glassmorphism**
+- **Material Design**
+- **Responsive Design**
 
 ## 🚦 Getting Started
 
