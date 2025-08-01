@@ -8,7 +8,6 @@ Professional sports club management platform that replaces Excel, WhatsApp and P
 - **Glassmorphism Design**: Modern transparent card with blur effects
 - **Sports Background**: Dynamic sports-themed background images
 - **Smooth Animations**: Material Design transitions and hover effects
-- **Social Login**: Integration with Google and Facebook
 - **Responsive Design**: Mobile-first approach with perfect responsiveness
 - **International Support**: Multi-language ready (currently English)
 - **Accessibility**: Support for reduced motion preferences
