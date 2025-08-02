@@ -35,7 +35,7 @@ router.post(
       .isLength({ min: 8 })
       .withMessage("Password must be at least 8 characters long")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]*$/,
       )
       .withMessage(
         "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
@@ -47,9 +47,26 @@ router.post(
       .isLength({ min: 2, max: 3 })
       .withMessage("Please provide a valid country code"),
     body("phone")
-      .optional()
-      .isMobilePhone()
-      .withMessage("Please provide a valid phone number"),
+      .optional({ values: "falsy" })
+      .custom((value) => {
+        if (!value || value.trim() === "") {
+          return true; // Allow empty phone
+        }
+        // Clean the phone number - remove spaces, dashes, parentheses
+        const cleanPhone = value.replace(/[\s\-\(\)]/g, "");
+
+        // More flexible phone validation
+        // Allow + followed by 1-4 digits (country code) then 6-12 digits
+        // Or just 6-15 digits without country code
+        const phoneRegex = /^(\+[1-9]\d{1,3})?[1-9]\d{5,11}$/;
+
+        if (!phoneRegex.test(cleanPhone)) {
+          throw new Error(
+            "Please provide a valid phone number (e.g., +351913331444 or 913331444)",
+          );
+        }
+        return true;
+      }),
   ],
   asyncHandler(async (req, res) => {
     // Check for validation errors

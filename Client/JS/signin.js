@@ -1,30 +1,24 @@
-// Password visibility toggle function
-function togglePassword(fieldId) {
-  const passwordInput = document.getElementById(fieldId);
-  const toggleIcon =
-    passwordInput.parentElement.querySelector(".toggle-password");
+// Toggle password visibility
+function togglePassword(inputId) {
+  const input = document.getElementById(inputId);
+  const icon = input.parentElement.querySelector(".toggle-password");
 
-  // Add smooth transition effect
-  toggleIcon.style.transform = "translateY(-50%) scale(0.8)";
-
-  setTimeout(() => {
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      toggleIcon.classList.remove("fa-eye");
-      toggleIcon.classList.add("fa-eye-slash");
-    } else {
-      passwordInput.type = "password";
-      toggleIcon.classList.remove("fa-eye-slash");
-      toggleIcon.classList.add("fa-eye");
-    }
-    toggleIcon.style.transform = "translateY(-50%) scale(1)";
-  }, 150);
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
+  } else {
+    input.type = "password";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
+  }
 }
 
 // Password validation requirements
 const passwordRequirements = {
   length: (password) => password.length >= 8,
   uppercase: (password) => /[A-Z]/.test(password),
+  lowercase: (password) => /[a-z]/.test(password),
   number: (password) => /\d/.test(password),
   special: (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password),
 };
@@ -34,25 +28,30 @@ function validatePassword(password) {
   const requirements = document.getElementById("passwordRequirements");
   const lengthReq = document.getElementById("lengthReq");
   const uppercaseReq = document.getElementById("uppercaseReq");
+  const lowercaseReq = document.getElementById("lowercaseReq");
   const numberReq = document.getElementById("numberReq");
   const specialReq = document.getElementById("specialReq");
 
   // Show requirements container
-  requirements.classList.add("show");
+  if (requirements) {
+    requirements.classList.add("show");
+  }
 
   // Check each requirement
   const validations = {
     length: passwordRequirements.length(password),
     uppercase: passwordRequirements.uppercase(password),
+    lowercase: passwordRequirements.lowercase(password),
     number: passwordRequirements.number(password),
     special: passwordRequirements.special(password),
   };
 
   // Update UI for each requirement
-  updateRequirement(lengthReq, validations.length);
-  updateRequirement(uppercaseReq, validations.uppercase);
-  updateRequirement(numberReq, validations.number);
-  updateRequirement(specialReq, validations.special);
+  if (lengthReq) updateRequirement(lengthReq, validations.length);
+  if (uppercaseReq) updateRequirement(uppercaseReq, validations.uppercase);
+  if (lowercaseReq) updateRequirement(lowercaseReq, validations.lowercase);
+  if (numberReq) updateRequirement(numberReq, validations.number);
+  if (specialReq) updateRequirement(specialReq, validations.special);
 
   // Return overall validation status
   return Object.values(validations).every((valid) => valid);
@@ -60,7 +59,10 @@ function validatePassword(password) {
 
 // Update individual requirement UI
 function updateRequirement(element, isValid) {
+  if (!element) return;
+
   const icon = element.querySelector("i");
+  if (!icon) return;
 
   if (isValid) {
     element.classList.add("valid");
@@ -76,22 +78,37 @@ function updateRequirement(element, isValid) {
 // Validate password match
 function validatePasswordMatch(password, confirmPassword) {
   const matchElement = document.getElementById("passwordMatch");
+
+  if (!matchElement) {
+    // Fallback validation without UI
+    return confirmPassword.length > 0 && password === confirmPassword;
+  }
+
   const icon = matchElement.querySelector("i");
+  const textSpan = matchElement.querySelector("span");
 
   if (confirmPassword.length > 0) {
     matchElement.classList.add("show");
 
     if (password === confirmPassword && password.length > 0) {
       matchElement.classList.add("valid");
-      icon.classList.remove("fa-times");
-      icon.classList.add("fa-check");
-      matchElement.querySelector("span").textContent = "Passwords match";
+      if (icon) {
+        icon.classList.remove("fa-times");
+        icon.classList.add("fa-check");
+      }
+      if (textSpan) {
+        textSpan.textContent = "Passwords match";
+      }
       return true;
     } else {
       matchElement.classList.remove("valid");
-      icon.classList.remove("fa-check");
-      icon.classList.add("fa-times");
-      matchElement.querySelector("span").textContent = "Passwords must match";
+      if (icon) {
+        icon.classList.remove("fa-check");
+        icon.classList.add("fa-times");
+      }
+      if (textSpan) {
+        textSpan.textContent = "Passwords must match";
+      }
       return false;
     }
   } else {
@@ -100,48 +117,24 @@ function validatePasswordMatch(password, confirmPassword) {
   }
 }
 
-// Check if form is valid and enable/disable submit button
-function checkFormValidity() {
-  const form = document.getElementById("signinForm");
-  const submitBtn = document.getElementById("signinBtn");
-  const formData = new FormData(form);
+// Email validation
+function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 
-  // Get all required fields
-  const firstName = formData.get("firstName");
-  const lastName = formData.get("lastName");
-  const birthDate = formData.get("birthDate");
-  const country = formData.get("country");
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const confirmPassword = formData.get("confirmPassword");
-  const terms = formData.get("terms");
+// Name validation
+function validateName(name) {
+  return name && name.trim().length >= 2;
+}
 
-  // Check if all fields are filled
-  const allFieldsFilled =
-    firstName &&
-    lastName &&
-    birthDate &&
-    country &&
-    email &&
-    password &&
-    confirmPassword &&
-    terms;
-
-  // Check password requirements
-  const passwordValid = validatePassword(password);
-  const passwordsMatch = validatePasswordMatch(password, confirmPassword);
-
-  // Check age requirement (minimum 13 years old)
-  const ageValid = checkAge(birthDate);
-
-  // Enable/disable submit button
-  if (allFieldsFilled && passwordValid && passwordsMatch && ageValid) {
-    submitBtn.disabled = false;
-    submitBtn.style.opacity = "1";
-  } else {
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = "0.6";
-  }
+// Phone validation
+function validatePhone(phone) {
+  if (!phone) return false;
+  // Remove all non-digit characters
+  const cleanPhone = phone.replace(/\D/g, "");
+  // Check if it's a valid length (typically 9-15 digits)
+  return cleanPhone.length >= 9 && cleanPhone.length <= 15;
 }
 
 // Check if user is at least 13 years old
@@ -159,72 +152,69 @@ function checkAge(birthDate) {
   return age >= 13;
 }
 
-// Email validation
-function validateEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+// Calculate age helper function
+function calculateAge(birthDate) {
+  const today = new Date();
+  const birth = new Date(birthDate);
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
 }
 
-// Form submission handler
-document.getElementById("signinForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+// Country validation
+function validateCountry(country) {
+  return country && country.trim() !== "";
+}
 
-  const btn = document.querySelector(".signin-btn");
-  const btnText = document.querySelector(".btn-text");
-  const btnLoader = document.querySelector(".btn-loader");
-  const formData = new FormData(this);
+// Check if form is valid and enable/disable submit button
+function checkFormValidity() {
+  const form = document.getElementById("signinForm");
+  const submitBtn = document.getElementById("signinBtn");
 
-  // Final validation before submission
+  if (!form || !submitBtn) return;
+
+  const formData = new FormData(form);
+
+  // Get all required fields
+  const firstName = formData.get("firstName");
+  const lastName = formData.get("lastName");
+  const birthDate = formData.get("birthDate");
+  const country = formData.get("country");
   const email = formData.get("email");
   const password = formData.get("password");
   const confirmPassword = formData.get("confirmPassword");
-  const birthDate = formData.get("birthDate");
+  const phone = formData.get("phone");
+  const terms = formData.get("terms");
 
-  // Validate email
-  if (!validateEmail(email)) {
-    showError("Please enter a valid email address.");
-    return;
+  // Individual validations
+  const validations = {
+    firstName: validateName(firstName),
+    lastName: validateName(lastName),
+    email: validateEmail(email),
+    password: validatePassword(password),
+    confirmPassword: validatePasswordMatch(password, confirmPassword),
+    birthDate: checkAge(birthDate),
+    country: validateCountry(country),
+    phone: validatePhone(phone),
+    terms: !!terms,
+  };
+
+  // Check if all validations pass
+  const allValid = Object.values(validations).every((valid) => valid);
+
+  // Enable/disable submit button
+  if (allValid) {
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = "1";
+  } else {
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = "0.6";
   }
-
-  // Validate age
-  if (!checkAge(birthDate)) {
-    showError("You must be at least 13 years old to create an account.");
-    return;
-  }
-
-  // Validate password
-  if (!validatePassword(password)) {
-    showError("Password does not meet security requirements.");
-    return;
-  }
-
-  // Validate password match
-  if (password !== confirmPassword) {
-    showError("Passwords do not match.");
-    return;
-  }
-
-  // Show loading state
-  btn.classList.add("loading");
-  btnText.style.opacity = "0";
-  btnText.style.transform = "translateY(-10px)";
-  btnLoader.style.display = "block";
-
-  setTimeout(() => {
-    btnLoader.classList.add("show");
-  }, 100);
-
-  // Simulate API call (replace with actual registration logic)
-  setTimeout(() => {
-    // Success feedback
-    showSuccess("Account created successfully! Redirecting...");
-
-    setTimeout(() => {
-      // Redirect to login page
-      window.location.href = "login.html";
-    }, 2000);
-  }, 3000);
-});
+}
 
 // Show error message
 function showError(message) {
@@ -236,16 +226,19 @@ function showError(message) {
   const alert = document.createElement("div");
   alert.className = "alert alert-error";
   alert.innerHTML = `
-        <i class="fas fa-exclamation-triangle"></i>
-        <span>${message}</span>
-        <button class="alert-close" onclick="this.parentElement.remove()">
-            <i class="fas fa-times"></i>
-        </button>
-    `;
+    <i class="fas fa-exclamation-triangle"></i>
+    <span>${message}</span>
+    <button class="alert-close" onclick="this.parentElement.remove()">
+      <i class="fas fa-times"></i>
+    </button>
+  `;
 
-  document
-    .querySelector(".signin-card")
-    .insertBefore(alert, document.querySelector(".signin-form"));
+  const signinCard = document.querySelector(".signin-card");
+  const signinForm = document.querySelector(".signin-form");
+
+  if (signinCard && signinForm) {
+    signinCard.insertBefore(alert, signinForm);
+  }
 
   // Auto-remove after 5 seconds
   setTimeout(() => {
@@ -265,199 +258,410 @@ function showSuccess(message) {
   const alert = document.createElement("div");
   alert.className = "alert alert-success";
   alert.innerHTML = `
-        <i class="fas fa-check-circle"></i>
-        <span>${message}</span>
-    `;
+    <i class="fas fa-check-circle"></i>
+    <span>${message}</span>
+  `;
 
-  document
-    .querySelector(".signin-card")
-    .insertBefore(alert, document.querySelector(".signin-form"));
+  const signinCard = document.querySelector(".signin-card");
+  const signinForm = document.querySelector(".signin-form");
+
+  if (signinCard && signinForm) {
+    signinCard.insertBefore(alert, signinForm);
+  }
 }
 
-// Input focus animations and validation
-document.querySelectorAll("input, select").forEach((input) => {
-  input.addEventListener("focus", function () {
-    this.parentElement.classList.add("focused");
-    this.style.transform = "translateY(-2px)";
-  });
+// Show loading state
+function showLoadingState(btn) {
+  if (!btn) return;
 
-  input.addEventListener("blur", function () {
-    this.style.transform = "translateY(0)";
-    if (this.value === "" && this.type !== "date") {
-      this.parentElement.classList.remove("focused");
-    }
-  });
+  const btnText = btn.querySelector(".btn-text");
+  const btnLoader = btn.querySelector(".btn-loader");
 
-  // Real-time validation for password fields
-  if (input.id === "password") {
-    input.addEventListener("input", function () {
-      validatePassword(this.value);
-      checkFormValidity();
+  btn.classList.add("loading");
+  if (btnText) {
+    btnText.style.opacity = "0";
+    btnText.style.transform = "translateY(-10px)";
+  }
+  if (btnLoader) {
+    btnLoader.style.display = "block";
+    setTimeout(() => {
+      btnLoader.classList.add("show");
+    }, 100);
+  }
+}
+
+// Hide loading state
+function hideLoadingState(btn) {
+  if (!btn) return;
+
+  const btnText = btn.querySelector(".btn-text");
+  const btnLoader = btn.querySelector(".btn-loader");
+
+  btn.classList.remove("loading");
+  if (btnText) {
+    btnText.style.opacity = "1";
+    btnText.style.transform = "translateY(0)";
+  }
+  if (btnLoader) {
+    btnLoader.classList.remove("show");
+    setTimeout(() => {
+      btnLoader.style.display = "none";
+    }, 300);
+  }
+}
+
+// Format phone number (optional)
+function formatPhoneNumber(phone) {
+  return phone.replace(/\D/g, "");
+}
+
+// Prepare user data for submission
+function prepareUserData(formData) {
+  return {
+    firstName: formData.get("firstName").trim(),
+    lastName: formData.get("lastName").trim(),
+    email: formData.get("email").trim().toLowerCase(),
+    password: formData.get("password"),
+    birthDate: formData.get("birthDate"),
+    country: formData.get("country"),
+    phone: formatPhoneNumber(formData.get("phone")),
+    terms: !!formData.get("terms"),
+  };
+}
+
+// Handle registration API call
+async function handleRegistration(userData) {
+  try {
+    // Replace with your actual API endpoint
+    const response = await fetch("http://localhost:3000/api/v1/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
     });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Registration failed");
+    }
+
+    const result = await response.json();
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+// Form submission handler
+async function handleFormSubmission(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const btn = document.querySelector(".signin-btn");
+  const formData = new FormData(form);
+
+  // Prepare user data
+  const userData = prepareUserData(formData);
+
+  // Final validation before submission
+  if (!validateEmail(userData.email)) {
+    showError("Please enter a valid email address.");
+    return;
   }
 
-  if (input.id === "confirmPassword") {
-    input.addEventListener("input", function () {
-      const password = document.getElementById("password").value;
-      validatePasswordMatch(password, this.value);
-      checkFormValidity();
-    });
+  if (!checkAge(userData.birthDate)) {
+    showError("You must be at least 13 years old to create an account.");
+    return;
   }
 
-  // General form validation check
-  input.addEventListener("input", checkFormValidity);
-  input.addEventListener("change", checkFormValidity);
+  if (!validatePassword(userData.password)) {
+    showError("Password does not meet security requirements.");
+    return;
+  }
 
-  // Smooth hover effect for inputs
-  input.addEventListener("mouseenter", function () {
-    if (!this.matches(":focus")) {
-      this.style.transform = "translateY(-1px)";
-    }
-  });
+  if (
+    !validatePasswordMatch(userData.password, formData.get("confirmPassword"))
+  ) {
+    showError("Passwords do not match.");
+    return;
+  }
 
-  input.addEventListener("mouseleave", function () {
-    if (!this.matches(":focus")) {
+  // Show loading state
+  showLoadingState(btn);
+
+  // Handle registration
+  const result = await handleRegistration(userData);
+
+  if (result.success) {
+    showSuccess("Account created successfully! Redirecting...");
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 2000);
+  } else {
+    hideLoadingState(btn);
+    showError(result.error || "Registration failed. Please try again.");
+  }
+}
+
+// Setup input handlers
+function setupInputHandlers() {
+  const inputs = document.querySelectorAll("input, select");
+
+  inputs.forEach((input) => {
+    // Focus and blur handlers
+    input.addEventListener("focus", function () {
+      this.parentElement.classList.add("focused");
+      this.style.transform = "translateY(-2px)";
+    });
+
+    input.addEventListener("blur", function () {
       this.style.transform = "translateY(0)";
+      if (this.value === "" && this.type !== "date") {
+        this.parentElement.classList.remove("focused");
+      }
+    });
+
+    // Real-time validation for password fields
+    if (input.id === "password") {
+      input.addEventListener("input", function () {
+        const isValid = validatePassword(this.value);
+
+        const confirmPassword = document.getElementById("confirmPassword");
+        if (confirmPassword && confirmPassword.value) {
+          validatePasswordMatch(this.value, confirmPassword.value);
+        }
+        checkFormValidity();
+      });
+
+      // Also add keyup listener for better responsiveness
+      input.addEventListener("keyup", function () {
+        validatePassword(this.value);
+        checkFormValidity();
+      });
+    }
+
+    if (input.id === "confirmPassword") {
+      input.addEventListener("input", function () {
+        const password = document.getElementById("password");
+        if (password) {
+          validatePasswordMatch(password.value, this.value);
+        }
+        checkFormValidity();
+      });
+
+      // Also add keyup listener
+      input.addEventListener("keyup", function () {
+        const password = document.getElementById("password");
+        if (password) {
+          validatePasswordMatch(password.value, this.value);
+        }
+        checkFormValidity();
+      });
+    }
+
+    // General form validation check
+    input.addEventListener("input", checkFormValidity);
+    input.addEventListener("change", checkFormValidity);
+
+    // Smooth hover effect for inputs
+    input.addEventListener("mouseenter", function () {
+      if (!this.matches(":focus")) {
+        this.style.transform = "translateY(-1px)";
+      }
+    });
+
+    input.addEventListener("mouseleave", function () {
+      if (!this.matches(":focus")) {
+        this.style.transform = "translateY(0)";
+      }
+    });
+
+    // Check if input has value on page load
+    if (input.value !== "" || input.type === "date") {
+      input.parentElement.classList.add("focused");
     }
   });
+}
 
-  // Check if input has value on page load
-  if (input.value !== "" || input.type === "date") {
-    input.parentElement.classList.add("focused");
+// Setup country selection
+function setupCountrySelection() {
+  const countrySelect = document.getElementById("country");
+  if (countrySelect) {
+    countrySelect.addEventListener("change", function () {
+      if (this.value) {
+        this.parentElement.classList.add("focused");
+      }
+      checkFormValidity();
+    });
   }
-});
+}
 
-// Initialize form validation on page load
-document.addEventListener("DOMContentLoaded", function () {
-  checkFormValidity();
+// Setup terms checkbox
+function setupTermsCheckbox() {
+  const termsCheckbox = document.getElementById("terms");
+  if (termsCheckbox) {
+    termsCheckbox.addEventListener("change", function () {
+      if (this.checked) {
+        this.parentElement.style.transform = "scale(1.02)";
+        setTimeout(() => {
+          this.parentElement.style.transform = "scale(1)";
+        }, 200);
+      }
+      checkFormValidity();
+    });
+  }
+}
 
-  // Add alert styles if not present
+// Setup form group animations
+function setupFormGroupAnimations() {
+  document.querySelectorAll(".form-group").forEach((group) => {
+    group.addEventListener("mouseenter", function () {
+      this.style.transform = "translateY(-1px)";
+    });
+
+    group.addEventListener("mouseleave", function () {
+      this.style.transform = "translateY(0)";
+    });
+  });
+}
+
+// Add alert styles
+function addAlertStyles() {
   if (!document.querySelector("style[data-alert-styles]")) {
     const alertStyles = document.createElement("style");
     alertStyles.setAttribute("data-alert-styles", "true");
     alertStyles.textContent = `
-            .alert {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 15px 20px;
-                margin-bottom: 20px;
-                border-radius: 8px;
-                font-size: 0.9rem;
-                animation: slideInDown 0.3s ease-out;
-                position: relative;
-            }
+      .alert {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        animation: slideInDown 0.3s ease-out;
+        position: relative;
+      }
 
-            .alert-error {
-                background: rgba(231, 76, 60, 0.1);
-                border: 1px solid rgba(231, 76, 60, 0.3);
-                color: #e74c3c;
-            }
+      .alert-error {
+        background: rgba(231, 76, 60, 0.1);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        color: #e74c3c;
+      }
 
-            .alert-success {
-                background: rgba(39, 174, 96, 0.1);
-                border: 1px solid rgba(39, 174, 96, 0.3);
-                color: #27ae60;
-            }
+      .alert-success {
+        background: rgba(39, 174, 96, 0.1);
+        border: 1px solid rgba(39, 174, 96, 0.3);
+        color: #27ae60;
+      }
 
-            .alert-close {
-                background: none;
-                border: none;
-                color: inherit;
-                cursor: pointer;
-                padding: 2px;
-                margin-left: auto;
-                opacity: 0.7;
-                transition: opacity 0.3s ease;
-            }
+      .alert-close {
+        background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        padding: 2px;
+        margin-left: auto;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+      }
 
-            .alert-close:hover {
-                opacity: 1;
-            }
+      .alert-close:hover {
+        opacity: 1;
+      }
 
-            @keyframes slideInDown {
-                from {
-                    opacity: 0;
-                    transform: translateY(-20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        `;
+      @keyframes slideInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    `;
     document.head.appendChild(alertStyles);
   }
-});
-
-// Smooth scroll behavior for links
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener("click", function (e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute("href"));
-    if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  });
-});
-
-// Country selection enhancement
-const countrySelect = document.getElementById("country");
-countrySelect.addEventListener("change", function () {
-  if (this.value) {
-    this.parentElement.classList.add("focused");
-  }
-});
-
-// Auto-format birth date (optional enhancement)
-const birthDateInput = document.getElementById("birthDate");
-birthDateInput.addEventListener("change", function () {
-  if (this.value) {
-    this.parentElement.classList.add("focused");
-    const age = calculateAge(this.value);
-    if (age < 13) {
-      showError("You must be at least 13 years old to create an account.");
-      this.value = "";
-      this.parentElement.classList.remove("focused");
-    }
-  }
-});
-
-// Calculate age helper function
-function calculateAge(birthDate) {
-  const today = new Date();
-  const birth = new Date(birthDate);
-  let age = today.getFullYear() - birth.getFullYear();
-  const monthDiff = today.getMonth() - birth.getMonth();
-
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-    age--;
-  }
-  return age;
 }
 
-// Enhanced form interactions
-document.querySelectorAll(".form-group").forEach((group) => {
-  group.addEventListener("mouseenter", function () {
-    this.style.transform = "translateY(-1px)";
+// Setup smooth scroll
+function setupSmoothScroll() {
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
   });
+}
 
-  group.addEventListener("mouseleave", function () {
-    this.style.transform = "translateY(0)";
-  });
-});
+// Initialize application
+function initializeApp() {
+  console.log("🚀 Initializing GamePlan Registration...");
 
-// Terms and conditions checkbox enhancement
-const termsCheckbox = document.getElementById("terms");
-termsCheckbox.addEventListener("change", function () {
-  if (this.checked) {
-    this.parentElement.style.transform = "scale(1.02)";
-    setTimeout(() => {
-      this.parentElement.style.transform = "scale(1)";
-    }, 200);
+  // Setup all components
+  setupInputHandlers();
+  setupCountrySelection();
+  setupTermsCheckbox();
+  setupFormGroupAnimations();
+  addAlertStyles();
+  setupSmoothScroll();
+
+  // Setup form submission
+  const form = document.getElementById("signinForm");
+  if (form) {
+    form.addEventListener("submit", handleFormSubmission);
   }
+
+  // Setup birth date special handling
+  const birthDateInput = document.getElementById("birthDate");
+  if (birthDateInput) {
+    birthDateInput.addEventListener("change", function () {
+      if (this.value) {
+        this.parentElement.classList.add("focused");
+        const age = calculateAge(this.value);
+        if (age < 13) {
+          showError("You must be at least 13 years old to create an account.");
+          this.value = "";
+          this.parentElement.classList.remove("focused");
+        }
+      }
+      checkFormValidity();
+    });
+  }
+
+  // Initial form validation check
   checkFormValidity();
+
+  console.log("✅ GamePlan Registration initialized successfully!");
+}
+
+// Initialize when DOM is ready
+document.addEventListener("DOMContentLoaded", initializeApp);
+
+// Handle page visibility changes (prevent timeout issues)
+document.addEventListener("visibilitychange", function () {
+  if (!document.hidden) {
+    checkFormValidity();
+  }
 });
+
+// Export functions for external use
+window.GamePlanSignIn = {
+  validateEmail,
+  validatePassword,
+  validateName,
+  validatePhone,
+  checkAge,
+  validateCountry,
+  checkFormValidity,
+  showError,
+  showSuccess,
+};

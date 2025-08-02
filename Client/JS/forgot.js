@@ -58,6 +58,7 @@ function validateEmail(email) {
 const passwordRequirements = {
   length: (password) => password.length >= 8,
   uppercase: (password) => /[A-Z]/.test(password),
+  lowercase: (password) => /[a-z]/.test(password),
   number: (password) => /\d/.test(password),
   special: (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password),
 };
@@ -67,25 +68,30 @@ function validatePassword(password) {
   const requirements = document.getElementById("passwordRequirements");
   const lengthReq = document.getElementById("lengthReq");
   const uppercaseReq = document.getElementById("uppercaseReq");
+  const lowercaseReq = document.getElementById("lowercaseReq");
   const numberReq = document.getElementById("numberReq");
   const specialReq = document.getElementById("specialReq");
 
   // Show requirements container
-  requirements.classList.add("show");
+  if (requirements) {
+    requirements.classList.add("show");
+  }
 
   // Check each requirement
   const validations = {
     length: passwordRequirements.length(password),
     uppercase: passwordRequirements.uppercase(password),
+    lowercase: passwordRequirements.lowercase(password),
     number: passwordRequirements.number(password),
     special: passwordRequirements.special(password),
   };
 
   // Update UI for each requirement
-  updateRequirement(lengthReq, validations.length);
-  updateRequirement(uppercaseReq, validations.uppercase);
-  updateRequirement(numberReq, validations.number);
-  updateRequirement(specialReq, validations.special);
+  if (lengthReq) updateRequirement(lengthReq, validations.length);
+  if (uppercaseReq) updateRequirement(uppercaseReq, validations.uppercase);
+  if (lowercaseReq) updateRequirement(lowercaseReq, validations.lowercase);
+  if (numberReq) updateRequirement(numberReq, validations.number);
+  if (specialReq) updateRequirement(specialReq, validations.special);
 
   // Return overall validation status
   return Object.values(validations).every((valid) => valid);
@@ -93,7 +99,10 @@ function validatePassword(password) {
 
 // Update individual requirement UI
 function updateRequirement(element, isValid) {
+  if (!element) return;
+
   const icon = element.querySelector("i");
+  if (!icon) return;
 
   if (isValid) {
     element.classList.add("valid");

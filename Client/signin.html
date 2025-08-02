@@ -113,6 +113,20 @@
 
                     <div class="form-group">
                         <div class="input-container">
+                            <i class="fas fa-phone input-icon"></i>
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="+351 912 345 678"
+                            />
+                            <label for="phone">Phone Number (Optional)</label>
+                            <div class="input-underline"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-container">
                             <i class="fas fa-lock input-icon"></i>
                             <input
                                 type="password"
@@ -138,6 +152,10 @@
                             <div class="requirement" id="uppercaseReq">
                                 <i class="fas fa-times"></i>
                                 <span>At least 1 uppercase letter</span>
+                            </div>
+                            <div class="requirement" id="lowercaseReq">
+                                <i class="fas fa-times"></i>
+                                <span>At least 1 lowercase letter</span>
                             </div>
                             <div class="requirement" id="numberReq">
                                 <i class="fas fa-times"></i>
@@ -210,6 +228,18 @@
                             Already have an account?
                             <a href="login.html">Sign In</a>
                         </p>
+                        <p style="margin-top: 15px">
+                            <a
+                                href="debug-signin.html"
+                                style="
+                                    color: #6c757d;
+                                    font-size: 12px;
+                                    text-decoration: none;
+                                "
+                            >
+                                🔧 Debug Tool
+                            </a>
+                        </p>
                     </div>
                 </form>
             </div>
@@ -226,6 +256,1016 @@
             </div>
         </div>
 
-        <script src="JS/signin.js"></script>
+        <script>
+            // Password validation requirements
+            const passwordRequirements = {
+                length: (password) => password.length >= 8,
+                uppercase: (password) => /[A-Z]/.test(password),
+                lowercase: (password) => /[a-z]/.test(password),
+                number: (password) => /\d/.test(password),
+                special: (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password),
+            };
+
+            // Validate password and update UI
+            function validatePassword(password) {
+                const requirements = document.getElementById(
+                    "passwordRequirements",
+                );
+                const lengthReq = document.getElementById("lengthReq");
+                const uppercaseReq = document.getElementById("uppercaseReq");
+                const lowercaseReq = document.getElementById("lowercaseReq");
+                const numberReq = document.getElementById("numberReq");
+                const specialReq = document.getElementById("specialReq");
+
+                // Show requirements container
+                if (requirements) {
+                    requirements.classList.add("show");
+                }
+
+                // Check each requirement
+                const validations = {
+                    length: passwordRequirements.length(password),
+                    uppercase: passwordRequirements.uppercase(password),
+                    lowercase: passwordRequirements.lowercase(password),
+                    number: passwordRequirements.number(password),
+                    special: passwordRequirements.special(password),
+                };
+
+                // Update UI for each requirement
+                if (lengthReq) updateRequirement(lengthReq, validations.length);
+                if (uppercaseReq)
+                    updateRequirement(uppercaseReq, validations.uppercase);
+                if (lowercaseReq)
+                    updateRequirement(lowercaseReq, validations.lowercase);
+                if (numberReq) updateRequirement(numberReq, validations.number);
+                if (specialReq)
+                    updateRequirement(specialReq, validations.special);
+
+                // Return overall validation status
+                return Object.values(validations).every((valid) => valid);
+            }
+
+            // Update individual requirement UI
+            function updateRequirement(element, isValid) {
+                if (!element) return;
+
+                const icon = element.querySelector("i");
+                if (!icon) return;
+
+                if (isValid) {
+                    element.classList.add("valid");
+                    icon.classList.remove("fa-times");
+                    icon.classList.add("fa-check");
+                } else {
+                    element.classList.remove("valid");
+                    icon.classList.remove("fa-check");
+                    icon.classList.add("fa-times");
+                }
+            }
+
+            // Toggle password visibility
+            function togglePassword(inputId) {
+                const input = document.getElementById(inputId);
+                const icon =
+                    input.parentElement.querySelector(".toggle-password");
+
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    input.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+            }
+
+            // Validate password match
+            function validatePasswordMatch(password, confirmPassword) {
+                const matchElement = document.getElementById("passwordMatch");
+                if (!matchElement) return false;
+
+                const icon = matchElement.querySelector("i");
+                const textSpan = matchElement.querySelector("span");
+
+                if (confirmPassword.length > 0) {
+                    matchElement.classList.add("show");
+
+                    if (password === confirmPassword && password.length > 0) {
+                        matchElement.classList.add("valid");
+                        if (icon) {
+                            icon.classList.remove("fa-times");
+                            icon.classList.add("fa-check");
+                        }
+                        if (textSpan) {
+                            textSpan.textContent = "Passwords match";
+                        }
+                        return true;
+                    } else {
+                        matchElement.classList.remove("valid");
+                        if (icon) {
+                            icon.classList.remove("fa-check");
+                            icon.classList.add("fa-times");
+                        }
+                        if (textSpan) {
+                            textSpan.textContent = "Passwords must match";
+                        }
+                        return false;
+                    }
+                } else {
+                    matchElement.classList.remove("show");
+                    return false;
+                }
+            }
+
+            // Validate email
+            function validateEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            // Validate name
+            function validateName(name) {
+                return name && name.trim().length >= 2;
+            }
+
+            // Validate phone (optional field)
+            function validatePhone(phone) {
+                if (!phone || phone.trim() === "") return true; // Optional field
+                const cleanPhone = phone.replace(/\D/g, "");
+                return cleanPhone.length >= 9 && cleanPhone.length <= 15;
+            }
+
+            // Check age (minimum 13 years)
+            function checkAge(birthDate) {
+                if (!birthDate) return false;
+
+                const today = new Date();
+                const birth = new Date(birthDate);
+                const age = today.getFullYear() - birth.getFullYear();
+                const monthDiff = today.getMonth() - birth.getMonth();
+
+                if (
+                    monthDiff < 0 ||
+                    (monthDiff === 0 && today.getDate() < birth.getDate())
+                ) {
+                    return age - 1 >= 13;
+                }
+                return age >= 13;
+            }
+
+            // Validate country
+            function validateCountry(country) {
+                return country && country.trim() !== "";
+            }
+
+            // Check form validity and enable/disable submit button
+            function checkFormValidity() {
+                const form = document.getElementById("signinForm");
+                const submitBtn = document.getElementById("signinBtn");
+
+                if (!form || !submitBtn) return;
+
+                const formData = new FormData(form);
+
+                // Get all required fields
+                const firstName = formData.get("firstName");
+                const lastName = formData.get("lastName");
+                const birthDate = formData.get("birthDate");
+                const country = formData.get("country");
+                const email = formData.get("email");
+                const password = formData.get("password");
+                const confirmPassword = formData.get("confirmPassword");
+                const phone = formData.get("phone");
+                const terms = formData.get("terms");
+
+                // Individual validations
+                const validations = {
+                    firstName: validateName(firstName),
+                    lastName: validateName(lastName),
+                    email: validateEmail(email),
+                    password: validatePassword(password),
+                    confirmPassword: validatePasswordMatch(
+                        password,
+                        confirmPassword,
+                    ),
+                    birthDate: checkAge(birthDate),
+                    country: validateCountry(country),
+                    phone: validatePhone(phone),
+                    terms: !!terms,
+                };
+
+                // Check if all validations pass
+                const allValid = Object.values(validations).every(
+                    (valid) => valid,
+                );
+
+                // Enable/disable submit button
+                if (allValid) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "1";
+                } else {
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = "0.6";
+                }
+            }
+
+            // Show error message
+            function showError(message) {
+                const existingAlert = document.querySelector(".alert");
+                if (existingAlert) {
+                    existingAlert.remove();
+                }
+
+                const alert = document.createElement("div");
+                alert.className = "alert alert-error";
+                alert.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>${message}</span>
+                    <button class="alert-close" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+
+                document
+                    .querySelector(".signin-card")
+                    .insertBefore(
+                        alert,
+                        document.querySelector(".signin-form"),
+                    );
+
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (alert.parentElement) {
+                        alert.remove();
+                    }
+                }, 5000);
+            }
+
+            // Show success message
+            function showSuccess(message) {
+                const existingAlert = document.querySelector(".alert");
+                if (existingAlert) {
+                    existingAlert.remove();
+                }
+
+                const alert = document.createElement("div");
+                alert.className = "alert alert-success";
+                alert.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>${message}</span>
+                `;
+
+                document
+                    .querySelector(".signin-card")
+                    .insertBefore(
+                        alert,
+                        document.querySelector(".signin-form"),
+                    );
+            }
+
+            // Show loading state
+            function showLoadingState(btn) {
+                if (!btn) return;
+
+                const btnText = btn.querySelector(".btn-text");
+                const btnLoader = btn.querySelector(".btn-loader");
+
+                btn.classList.add("loading");
+                btn.disabled = true;
+
+                if (btnText) {
+                    btnText.style.opacity = "0";
+                    btnText.style.transform = "translateY(-10px)";
+                }
+                if (btnLoader) {
+                    btnLoader.style.display = "block";
+                    setTimeout(() => {
+                        btnLoader.classList.add("show");
+                    }, 100);
+                }
+            }
+
+            // Hide loading state
+            function hideLoadingState(btn) {
+                if (!btn) return;
+
+                const btnText = btn.querySelector(".btn-text");
+                const btnLoader = btn.querySelector(".btn-loader");
+
+                btn.classList.remove("loading");
+                btn.disabled = false;
+
+                if (btnText) {
+                    btnText.style.opacity = "1";
+                    btnText.style.transform = "translateY(0)";
+                }
+                if (btnLoader) {
+                    btnLoader.classList.remove("show");
+                    setTimeout(() => {
+                        btnLoader.style.display = "none";
+                    }, 300);
+                }
+            }
+
+            // Handle form submission and API call
+            async function handleFormSubmission(e) {
+                e.preventDefault();
+
+                const form = e.target;
+                const btn = document.getElementById("signinBtn");
+                const formData = new FormData(form);
+
+                // Prepare user data
+                const userData = {
+                    firstName: formData.get("firstName").trim(),
+                    lastName: formData.get("lastName").trim(),
+                    email: formData.get("email").trim().toLowerCase(),
+                    password: formData.get("password"),
+                    birthDate: formData.get("birthDate"),
+                    country: formData.get("country"),
+                    phone: formData.get("phone")
+                        ? formData.get("phone").replace(/\D/g, "")
+                        : null,
+                    terms: !!formData.get("terms"),
+                };
+
+                // Final validation
+                if (!validateEmail(userData.email)) {
+                    showError("Please enter a valid email address.");
+                    return;
+                }
+
+                if (!checkAge(userData.birthDate)) {
+                    showError(
+                        "You must be at least 13 years old to create an account.",
+                    );
+                    return;
+                }
+
+                if (!validatePassword(userData.password)) {
+                    showError("Password does not meet security requirements.");
+                    return;
+                }
+
+                if (
+                    !validatePasswordMatch(
+                        userData.password,
+                        formData.get("confirmPassword"),
+                    )
+                ) {
+                    showError("Passwords do not match.");
+                    return;
+                }
+
+                // Show loading state
+                showLoadingState(btn);
+
+                try {
+                    // Make API call
+                    const response = await fetch(
+                        "http://localhost:3000/api/v1/auth/register",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Accept: "application/json",
+                            },
+                            body: JSON.stringify(userData),
+                        },
+                    );
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        showSuccess(
+                            "Account created successfully! Redirecting to login...",
+                        );
+
+                        // Store success info
+                        localStorage.setItem("registrationSuccess", "true");
+                        localStorage.setItem("registeredEmail", userData.email);
+
+                        // Redirect after delay
+                        setTimeout(() => {
+                            window.location.href = "login.html";
+                        }, 2000);
+                    } else {
+                        // Handle API errors
+                        let errorMessage =
+                            result.message ||
+                            "Registration failed. Please try again.";
+
+                        if (result.error && result.error.details) {
+                            const validationErrors = result.error.details
+                                .map(
+                                    (detail) =>
+                                        `${detail.field}: ${detail.message}`,
+                                )
+                                .join(", ");
+                            errorMessage += ` (${validationErrors})`;
+                        }
+
+                        hideLoadingState(btn);
+                        showError(errorMessage);
+                    }
+                } catch (error) {
+                    hideLoadingState(btn);
+
+                    if (
+                        error.name === "TypeError" &&
+                        error.message.includes("fetch")
+                    ) {
+                        showError(
+                            "Unable to connect to server. Please check if the API is running on localhost:3000.",
+                        );
+                    } else {
+                        showError(
+                            "Network error. Please check your connection and try again.",
+                        );
+                    }
+                }
+            }
+
+            // Initialize when DOM is ready
+            document.addEventListener("DOMContentLoaded", function () {
+                // Setup password field
+                const passwordField = document.getElementById("password");
+                if (passwordField) {
+                    passwordField.addEventListener("input", function () {
+                        if (this.value.length > 0) {
+                            validatePassword(this.value);
+                        } else {
+                            const requirements = document.getElementById(
+                                "passwordRequirements",
+                            );
+                            if (requirements) {
+                                requirements.classList.remove("show");
+                            }
+                        }
+                        checkFormValidity();
+                    });
+                }
+
+                // Setup confirm password field
+                const confirmPasswordField =
+                    document.getElementById("confirmPassword");
+                if (confirmPasswordField) {
+                    confirmPasswordField.addEventListener("input", function () {
+                        const password =
+                            document.getElementById("password").value;
+                        validatePasswordMatch(password, this.value);
+                        checkFormValidity();
+                    });
+                }
+
+                // Setup all form fields for validation
+                const inputs = document.querySelectorAll("input, select");
+                inputs.forEach((input) => {
+                    input.addEventListener("input", checkFormValidity);
+                    input.addEventListener("change", checkFormValidity);
+
+                    // Focus and blur handlers for better UX
+                    input.addEventListener("focus", function () {
+                        this.parentElement.classList.add("focused");
+                    });
+
+                    input.addEventListener("blur", function () {
+                        if (this.value === "" && this.type !== "date") {
+                            this.parentElement.classList.remove("focused");
+                        }
+                    });
+
+                    // Check if input has value on page load
+                    if (input.value !== "" || input.type === "date") {
+                        input.parentElement.classList.add("focused");
+                    }
+                });
+
+                // Setup form submission
+                const form = document.getElementById("signinForm");
+                if (form) {
+                    form.addEventListener("submit", handleFormSubmission);
+                }
+
+                // Add alert styles
+                const alertStyles = document.createElement("style");
+                alertStyles.textContent = `
+                    .alert {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        padding: 15px 20px;
+                        margin-bottom: 20px;
+                        border-radius: 8px;
+                        font-size: 0.9rem;
+                        animation: slideInDown 0.3s ease-out;
+                        position: relative;
+                    }
+                    .alert-error {
+                        background: rgba(231, 76, 60, 0.1);
+                        border: 1px solid rgba(231, 76, 60, 0.3);
+                        color: #e74c3c;
+                    }
+                    .alert-success {
+                        background: rgba(39, 174, 96, 0.1);
+                        border: 1px solid rgba(39, 174, 96, 0.3);
+                        color: #27ae60;
+                    }
+                    .alert-close {
+                        background: none;
+                        border: none;
+                        color: inherit;
+                        cursor: pointer;
+                        padding: 2px;
+                        margin-left: auto;
+                        opacity: 0.7;
+                        transition: opacity 0.3s ease;
+                    }
+                    .alert-close:hover {
+                        opacity: 1;
+                    }
+                    @keyframes slideInDown {
+                        from {
+                            opacity: 0;
+                            transform: translateY(-20px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                    .signin-btn.loading .btn-loader {
+                        display: block !important;
+                        width: 20px;
+                        height: 20px;
+                        border: 2px solid rgba(255, 255, 255, 0.3);
+                        border-top: 2px solid white;
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                        margin: 0 auto;
+                    }
+                    .signin-btn.loading .btn-loader.show {
+                        opacity: 1;
+                    }
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(alertStyles);
+
+                // Initial form validation check
+                setTimeout(checkFormValidity, 100);
+            });
+
+            // Add test button to page
+            window.addEventListener("load", function () {
+                const testButton = document.createElement("button");
+                testButton.textContent = "Fill Test Data";
+                testButton.style.cssText =
+                    "position:fixed;top:10px;right:10px;z-index:9999;padding:10px;background:#007bff;color:white;border:none;border-radius:5px;cursor:pointer;";
+                testButton.onclick = quickFillTest;
+                document.body.appendChild(testButton);
+            });
+        </script>
+        <script>
+                        // Test form submission directly
+                        function testSubmitForm() {
+                            console.log("🧪 Testing form submission directly...");
+                            const form = document.getElementById("signinForm");
+                            const submitBtn = document.getElementById("signinBtn");
+
+                            if (!form) {
+                                console.error("❌ Form not found!");
+                                return;
+                            }
+
+                            if (!submitBtn) {
+                                console.error("❌ Submit button not found!");
+                                return;
+                            }
+
+                            console.log("✅ Form and button found");
+                            console.log("📋 Current button state:", {
+                                disabled: submitBtn.disabled,
+                                className: submitBtn.className,
+                                opacity: submitBtn.style.opacity,
+                            });
+
+                            // Enable button temporarily for testing
+                            const originalDisabled = submitBtn.disabled;
+                            submitBtn.disabled = false;
+                            submitBtn.style.opacity = "1";
+
+                            console.log("🚀 Triggering form submit event...");
+
+                            // Create and dispatch submit event
+                            const submitEvent = new Event("submit", {
+                                bubbles: true,
+                                cancelable: true,
+                            });
+
+                            const eventResult = form.dispatchEvent(submitEvent);
+                            console.log("📤 Submit event dispatched:", eventResult);
+
+                            // Restore original state
+                            setTimeout(() => {
+                                submitBtn.disabled = originalDisabled;
+                            }, 1000);
+                        }
+
+                        function showTestDataNotification() {
+                            // Remove existing alerts
+                            const existingAlert = document.querySelector(".alert");
+                            if (existingAlert) {
+                                existingAlert.remove();
+                            }
+
+                            const alert = document.createElement("div");
+                            alert.className = "alert alert-success";
+                            alert.innerHTML = `
+                                <i class="fas fa-check-circle"></i>
+                                <span>✅ Test data filled! Form should be ready.</span>
+                            `;
+
+                            const signinCard = document.querySelector(".signin-card");
+                            const signinForm = document.querySelector(".signin-form");
+                            if (signinCard && signinForm) {
+                                signinCard.insertBefore(alert, signinForm);
+                            }
+
+                            // Auto-remove after 5 seconds
+                            setTimeout(() => {
+                                if (alert.parentElement) {
+                                    alert.remove();
+                                }
+                            }, 5000);
+                        }
+            };
+
+            // Debug function to check form state
+            window.debugForm = function () {
+                console.log("🔍 === FORM DEBUG INFO ===");
+
+                const form = document.getElementById("signinForm");
+                const submitBtn = document.getElementById("signinBtn");
+
+                // Form data
+                if (form) {
+                    const formData = new FormData(form);
+                    console.log("📋 Form data:", {
+                        firstName: formData.get("firstName"),
+                        lastName: formData.get("lastName"),
+                        email: formData.get("email"),
+                        password: formData.get("password") ? "***" : "empty",
+                        confirmPassword: formData.get("confirmPassword") ? "***" : "empty",
+                        birthDate: formData.get("birthDate"),
+                        country: formData.get("country"),
+                        phone: formData.get("phone"),
+                        terms: formData.get("terms"),
+                    });
+                } else {
+                    console.error("❌ Form not found!");
+                }
+
+                // Button state
+                if (submitBtn) {
+                    console.log("🔘 Submit button:", {
+                        disabled: submitBtn.disabled,
+                        opacity: submitBtn.style.opacity,
+                        className: submitBtn.className,
+                        innerHTML: submitBtn.innerHTML.substring(0, 50),
+                    });
+                } else {
+                    console.error("❌ Submit button not found!");
+                }
+
+                // API status
+                console.log("🔌 API Status:", {
+                    GamePlanAPI: !!window.GamePlanAPI,
+                    baseURL: window.GamePlanAPI?.baseURL,
+                    API_CONFIG: typeof API_CONFIG !== "undefined",
+                    APP_SETTINGS: typeof APP_SETTINGS !== "undefined",
+                    STORAGE_KEYS: typeof STORAGE_KEYS !== "undefined",
+                });
+
+                // Event listeners check
+                console.log("👂 Event listeners check:");
+                if (form) {
+                    const listeners = form.cloneNode(true);
+                    console.log("Form has submit listener:", form.onsubmit !== null);
+                }
+
+                submitBtn.addEventListener('onclick', () => {
+                    if(submitBtn.enabled) {
+                      async function testRegistration() {
+                          const form = document.getElementById("signinForm");
+                          const formData = new FormData(form);
+
+                          logToConsole(
+                              "Starting registration test with current form data...",
+                          );
+
+                          // Validate passwords match
+                          if (
+                              formData.get("password") !== formData.get("confirmPassword")
+                          ) {
+                              logToConsole("Password mismatch detected", "error");
+                              showAlert("❌ Passwords do not match!", "error");
+                              return;
+                          }
+
+                          const userData = {
+                              firstName: form.get("firstName").trim(),
+                              lastName: form.get("lastName").trim(),
+                              email: form.get("email").trim().toLowerCase(),
+                              password: form.get("password"),
+                              birthDate: form.get("birthDate"),
+                              country: form.get("country"),
+                          };
+
+                          // Only add phone if it's not empty
+                          const phone = formData.get("phone")?.trim();
+                          if (phone) {
+                              userData.phone = phone;
+                          }
+
+                          logToConsole(
+                              `Registration data: ${JSON.stringify(userData, null, 2)}`,
+                          );
+
+                          try {
+                              if (!window.GamePlanAPI) {
+                                  throw new Error("GamePlan API not loaded");
+                              }
+
+                              logToConsole("Calling registration API...");
+                              const response =
+                                  await window.GamePlanAPI.register(userData);
+
+                              logToConsole(
+                                  `Registration response: ${JSON.stringify(response, null, 2)}`,
+                                  "success",
+                              );
+
+                              if (response.success) {
+                                  showAlert("✅ Registration successful!", "success");
+                                  logToConsole(
+                                      "Registration completed successfully",
+                                      "success",
+                                  );
+
+                                  if (response.data && response.data.user) {
+                                      logToConsole(
+                                          `User created: ${response.data.user.firstName} ${response.data.user.lastName} (${response.data.user.email})`,
+                                      );
+                                  }
+                              } else {
+                                  logToConsole(
+                                      `Registration failed: ${response.message}`,
+                                      "error",
+                                  );
+                                  showAlert(
+                                      `❌ Registration failed: ${response.message}`,
+                                      "error",
+                                  );
+                              }
+                          } catch (error) {
+                              logToConsole(
+                                  `Registration error: ${error.message}`,
+                                  "error",
+                              );
+                              logToConsole(`Error stack: ${error.stack}`, "error");
+                              showAlert(
+                                  `❌ Registration failed: ${error.message}`,
+                                  "error",
+                              );
+                          }
+                      }
+                    }
+                });
+
+                // Validation functions check
+                console.log("🔧 Validation functions:");
+                console.log({
+                    checkFormValidity: typeof checkFormValidity,
+                    validateEmail: typeof validateEmail,
+                    validatePassword: typeof validatePassword,
+                    validateName: typeof validateName,
+                    checkAge: typeof checkAge,
+                });
+
+                // Test validation manually
+                if (typeof checkFormValidity === 'function') {
+                    console.log("🧪 Running manual validation test...");
+                    const validationResult = checkFormValidity();
+                    console.log("Validation result:", validationResult);
+                }
+
+                console.log("🔍 === END DEBUG INFO ===");
+            };
+
+            // Test API directly bypassing form
+            window.testAPIDirectly = async function() {
+                console.log("🔥 === TESTING API DIRECTLY ===");
+
+                const timestamp = Date.now();
+                const userData = {
+                    firstName: "TestDirect",
+                    lastName: "User",
+                    email: `direct.test.${timestamp}@example.com`,
+                    password: "TestPass123#",
+                    birthDate: "1990-01-01",
+                    country: "PT"
+                };
+
+                console.log("📋 User data:", userData);
+
+                try {
+                    if (!window.GamePlanAPI) {
+                        throw new Error('GamePlan API not available');
+                    }
+
+                    console.log("🚀 Calling API directly...");
+                    console.log("API instance:", window.GamePlanAPI);
+                    console.log("Register method:", typeof window.GamePlanAPI.register);
+
+                    const response = await window.GamePlanAPI.register(userData);
+
+                    console.log("✅ Direct API call successful:", response);
+
+                    // Show notification
+                    const alert = document.createElement("div");
+                    alert.className = "alert alert-success";
+                    alert.innerHTML = `
+                        <i class="fas fa-check-circle"></i>
+                        <span>✅ Direct API test successful! Check console for details.</span>
+                    `;
+
+                    const signinCard = document.querySelector(".signin-card");
+                    const signinForm = document.querySelector(".signin-form");
+                    if (signinCard && signinForm) {
+                        signinCard.insertBefore(alert, signinForm);
+                    }
+
+                    setTimeout(() => {
+                        if (alert.parentElement) {
+                            alert.remove();
+                        }
+                    }, 5000);
+
+                } catch (error) {
+                    console.error("❌ Direct API test failed:", error);
+
+                    // Show error notification
+                    const alert = document.createElement("div");
+                    alert.className = "alert alert-error";
+                    alert.innerHTML = `
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>❌ Direct API test failed: ${error.message}</span>
+                    `;
+
+                    const signinCard = document.querySelector(".signin-card");
+                    const signinForm = document.querySelector(".signin-form");
+                    if (signinCard && signinForm) {
+                        signinCard.insertBefore(alert, signinForm);
+                    }
+
+                    setTimeout(() => {
+                        if (alert.parentElement) {
+                            alert.remove();
+                        }
+                    }, 5000);
+                }
+            };
+
+            // Test password validation specifically
+            window.testPassword = function() {
+                console.log("🔑 === TESTING PASSWORD VALIDATION ===");
+
+                const passwordField = document.getElementById('password');
+                const confirmPasswordField = document.getElementById('confirmPassword');
+
+                if (!passwordField) {
+                    console.error("❌ Password field not found!");
+                    return;
+                }
+
+                const testPasswords = [
+                    "TestPass123#",
+                    "TestPass123!",
+                    "Joelm2003#",
+                    "Password1!",
+                    "weak",
+                    "NoSpecial123",
+                    "nouppercas3!",
+                    "NOLOWERCASE3!"
+                ];
+
+                testPasswords.forEach(pwd => {
+                    console.log(`\n🧪 Testing password: "${pwd}"`);
+
+                    if (window.testPasswordValidation) {
+                        window.testPasswordValidation(pwd);
+                    } else {
+                        console.log("❌ testPasswordValidation function not available");
+                    }
+                });
+
+                // Test with current form password
+                const currentPassword = passwordField.value;
+                if (currentPassword) {
+                    console.log(`\n🔍 Current form password: "${currentPassword}"`);
+                    if (window.testPasswordValidation) {
+                        window.testPasswordValidation(currentPassword);
+                    }
+                } else {
+                    console.log("ℹ️ No password in form field");
+                }
+
+                // Test validation function directly
+                console.log("\n🔧 Testing validation functions directly:");
+                const password = "TestPass123#";
+                console.log("Password:", password);
+                console.log("Length ≥8:", password.length >= 8);
+                console.log("Has uppercase:", /[A-Z]/.test(password));
+                console.log("Has lowercase:", /[a-z]/.test(password));
+                console.log("Has number:", /\d/.test(password));
+                console.log("Has special [!@#$%^&*(),.?\":{}|<>]:", /[!@#$%^&*(),.?":{}|<>]/.test(password));
+
+                console.log("🔑 === END PASSWORD TEST ===");
+            };
+
+            // Test UI validation in real time
+            window.testUIValidation = function() {
+                console.log("🎨 === TESTING UI VALIDATION ===");
+
+                const passwordField = document.getElementById('password');
+                const confirmPasswordField = document.getElementById('confirmPassword');
+                const submitBtn = document.getElementById('signinBtn');
+
+                if (!passwordField) {
+                    console.error("❌ Password field not found!");
+                    return;
+                }
+
+                console.log("✅ Found form elements");
+
+                // Test password validation UI
+                console.log("🔍 Testing password UI updates...");
+
+                // Clear field first
+                passwordField.value = "";
+                passwordField.dispatchEvent(new Event('input', { bubbles: true }));
+
+                // Type password character by character
+                const testPassword = "TestPass123#";
+                console.log(`📝 Typing password: ${testPassword}`);
+
+                let currentValue = "";
+                for (let i = 0; i < testPassword.length; i++) {
+                    setTimeout(() => {
+                        currentValue += testPassword[i];
+                        passwordField.value = currentValue;
+                        console.log(`📝 Current password: "${currentValue}"`);
+
+                        // Trigger validation
+                        passwordField.dispatchEvent(new Event('input', { bubbles: true }));
+                        passwordField.dispatchEvent(new Event('keyup', { bubbles: true }));
+
+                        // Check UI elements
+                        const requirements = document.getElementById('passwordRequirements');
+                        if (requirements) {
+                            console.log("UI Requirements visible:", requirements.classList.contains('show'));
+                        }
+
+                        // Check submit button state
+                        if (submitBtn) {
+                            console.log("Submit button state:", {
+                                disabled: submitBtn.disabled,
+                                opacity: submitBtn.style.opacity,
+                                classes: submitBtn.className
+                            });
+                        }
+
+                        if (i === testPassword.length - 1) {
+                            // Final test - also fill confirm password
+                            setTimeout(() => {
+                                if (confirmPasswordField) {
+                                    confirmPasswordField.value = testPassword;
+                                    confirmPasswordField.dispatchEvent(new Event('input', { bubbles: true }));
+                                    console.log("✅ Filled confirm password");
+                                }
+                            }, 500);
+                        }
+                    }, i * 200); // 200ms delay between characters
+                }
+
+                console.log("🎨 === UI TEST STARTED ===");
+            };
+        </script>
+        <script src="JS/config.js"></script>
+        <script src="JS/api.js"></script>
     </body>
 </html>

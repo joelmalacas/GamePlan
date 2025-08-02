@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GamePlan - Debug Registration</title>
+        <style>
+            body {
+                font-family: "Arial", sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+                padding: 20px;
+            }
+
+            .debug-container {
+                background: white;
+                border-radius: 12px;
+                padding: 30px;
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+                max-width: 800px;
+                width: 100%;
+            }
+
+            .debug-title {
+                text-align: center;
+                color: #333;
+                margin-bottom: 30px;
+                font-size: 24px;
+            }
+
+            .debug-section {
+                margin-bottom: 30px;
+                padding: 20px;
+                border: 1px solid #e1e5e9;
+                border-radius: 8px;
+                background: #f8f9fa;
+            }
+
+            .debug-section h3 {
+                margin-top: 0;
+                color: #495057;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                color: #555;
+                font-weight: bold;
+            }
+
+            input,
+            select {
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e1e5e9;
+                border-radius: 6px;
+                font-size: 16px;
+                transition: border-color 0.3s ease;
+                box-sizing: border-box;
+            }
+
+            input:focus,
+            select:focus {
+                outline: none;
+                border-color: #667eea;
+            }
+
+            .checkbox-group {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            .checkbox-group input {
+                width: auto;
+                margin-right: 10px;
+            }
+
+            .btn {
+                padding: 15px 30px;
+                margin: 5px;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s ease;
+            }
+
+            .btn-primary {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+
+            .btn-secondary {
+                background: #6c757d;
+                color: white;
+            }
+
+            .btn-success {
+                background: #28a745;
+                color: white;
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+            }
+
+            .btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+            .loading {
+                opacity: 0.7;
+                position: relative;
+            }
+
+            .loading::after {
+                content: "";
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                margin: auto;
+                border: 2px solid transparent;
+                border-top-color: #ffffff;
+                border-radius: 50%;
+                animation: spin 1s ease infinite;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .alert {
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: 6px;
+                font-size: 14px;
+            }
+
+            .alert-error {
+                background-color: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
+
+            .alert-success {
+                background-color: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
+
+            .alert-info {
+                background-color: #d1ecf1;
+                color: #0c5460;
+                border: 1px solid #bee5eb;
+            }
+
+            .debug-info {
+                background: #e3f2fd;
+                border: 1px solid #90caf9;
+                color: #0d47a1;
+                padding: 15px;
+                border-radius: 6px;
+                margin-bottom: 20px;
+                font-size: 14px;
+            }
+
+            .console-output {
+                background: #1e1e1e;
+                color: #ffffff;
+                padding: 15px;
+                border-radius: 6px;
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                max-height: 300px;
+                overflow-y: auto;
+                white-space: pre-wrap;
+            }
+
+            .two-column {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            @media (max-width: 768px) {
+                .two-column {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="debug-container">
+            <h1 class="debug-title">🔧 GamePlan Registration Debug Tool</h1>
+
+            <div class="debug-info">
+                <strong>Debug Instructions:</strong><br />
+                This tool helps debug the registration API integration. Use the
+                buttons below to test different scenarios. Make sure the backend
+                server is running on <code>http://localhost:3000</code>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="debug-section">
+                <h3>🔍 System Status</h3>
+                <button class="btn btn-secondary" onclick="checkSystemStatus()">
+                    Check System Status
+                </button>
+                <button
+                    class="btn btn-secondary"
+                    onclick="testServerConnection()"
+                >
+                    Test Server Connection
+                </button>
+                <button class="btn btn-secondary" onclick="clearConsole()">
+                    Clear Console
+                </button>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <div class="debug-section">
+                        <h3>📝 Registration Form</h3>
+                        <form id="debugForm">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input
+                                    type="text"
+                                    id="firstName"
+                                    name="firstName"
+                                    required
+                                    value="João"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input
+                                    type="text"
+                                    id="lastName"
+                                    name="lastName"
+                                    required
+                                    value="Silva"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                    value=""
+                                    placeholder="Will be auto-generated for testing"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password *</label>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    required
+                                    value="TestPass123!"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword"
+                                    >Confirm Password *</label
+                                >
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    required
+                                    value="TestPass123!"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="birthDate">Birth Date *</label>
+                                <input
+                                    type="date"
+                                    id="birthDate"
+                                    name="birthDate"
+                                    required
+                                    value="1995-06-15"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="country">Country *</label>
+                                <select id="country" name="country" required>
+                                    <option value="">Select Country</option>
+                                    <option value="PT" selected>
+                                        Portugal
+                                    </option>
+                                    <option value="BR">Brazil</option>
+                                    <option value="US">United States</option>
+                                    <option value="GB">United Kingdom</option>
+                                    <option value="ES">Spain</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Phone (Optional)</label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    value=""
+                                    placeholder="Leave empty for testing"
+                                />
+                                <small>Leave empty to test without phone</small>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input
+                                    type="checkbox"
+                                    id="terms"
+                                    name="terms"
+                                    required
+                                    checked
+                                />
+                                <label for="terms"
+                                    >I agree to the Terms of Service and Privacy
+                                    Policy *</label
+                                >
+                            </div>
+
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                onclick="testRegistration()"
+                            >
+                                🧪 Test Registration
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-success"
+                                onclick="testValidRegistration()"
+                            >
+                                ✅ Test Valid Data
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                onclick="testInvalidData()"
+                            >
+                                ❌ Test Invalid Data
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="debug-section">
+                        <h3>📊 Debug Console</h3>
+                        <div id="consoleOutput" class="console-output">
+                            Debug console initialized...\n
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="JS/config.js"></script>
+        <script src="JS/api.js"></script>
+        <script>
+            let debugLog = "Debug console initialized...\n";
+
+            function logToConsole(message, type = "info") {
+                const timestamp = new Date().toLocaleTimeString();
+                const prefix =
+                    type === "error"
+                        ? "❌"
+                        : type === "success"
+                          ? "✅"
+                          : type === "warning"
+                            ? "⚠️"
+                            : "ℹ️";
+                const logMessage = `[${timestamp}] ${prefix} ${message}\n`;
+
+                debugLog += logMessage;
+                document.getElementById("consoleOutput").textContent = debugLog;
+                document.getElementById("consoleOutput").scrollTop =
+                    document.getElementById("consoleOutput").scrollHeight;
+
+                // Also log to browser console
+                console.log(`${prefix} ${message}`);
+            }
+
+            function clearConsole() {
+                debugLog = "Debug console cleared...\n";
+                document.getElementById("consoleOutput").textContent = debugLog;
+            }
+
+            function showAlert(message, type) {
+                const alertContainer =
+                    document.getElementById("alertContainer");
+                const alert = document.createElement("div");
+                alert.className = `alert alert-${type}`;
+                alert.textContent = message;
+                alertContainer.appendChild(alert);
+
+                setTimeout(
+                    () => {
+                        if (alert.parentNode) {
+                            alert.parentNode.removeChild(alert);
+                        }
+                    },
+                    type === "success" ? 10000 : 15000,
+                );
+            }
+
+            function checkSystemStatus() {
+                logToConsole("Checking system status...");
+
+                const checks = {
+                    "GamePlan API": window.GamePlanAPI,
+                    API_CONFIG:
+                        typeof API_CONFIG !== "undefined" ? API_CONFIG : null,
+                    APP_SETTINGS:
+                        typeof APP_SETTINGS !== "undefined"
+                            ? APP_SETTINGS
+                            : null,
+                    STORAGE_KEYS:
+                        typeof STORAGE_KEYS !== "undefined"
+                            ? STORAGE_KEYS
+                            : null,
+                };
+
+                for (const [name, value] of Object.entries(checks)) {
+                    if (value) {
+                        logToConsole(`${name}: ✅ Available`, "success");
+                        if (name === "GamePlan API") {
+                            logToConsole(`API Base URL: ${value.baseURL}`);
+                        }
+                    } else {
+                        logToConsole(`${name}: ❌ Not available`, "error");
+                    }
+                }
+
+                if (window.GamePlanAPI && typeof API_CONFIG !== "undefined") {
+                    showAlert(
+                        "✅ System status: All components loaded",
+                        "success",
+                    );
+                } else {
+                    showAlert(
+                        "❌ System status: Some components missing",
+                        "error",
+                    );
+                }
+            }
+
+            async function testServerConnection() {
+                logToConsole("Testing server connection...");
+
+                if (!window.GamePlanAPI) {
+                    logToConsole("GamePlan API not available", "error");
+                    return;
+                }
+
+                const baseUrl = window.GamePlanAPI.baseURL.replace(
+                    "/api/v1",
+                    "",
+                );
+
+                try {
+                    const response = await fetch(`${baseUrl}/api/v1/auth/me`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+
+                    logToConsole(
+                        `Server response: ${response.status} ${response.statusText}`,
+                    );
+
+                    if (response.status === 401) {
+                        showAlert(
+                            "✅ Server is running and responding correctly",
+                            "success",
+                        );
+                        logToConsole(
+                            "Server is accessible (401 expected for unauthenticated request)",
+                            "success",
+                        );
+                    } else if (response.status < 500) {
+                        showAlert(
+                            `✅ Server is running (status: ${response.status})`,
+                            "success",
+                        );
+                        logToConsole(
+                            `Server responded with status: ${response.status}`,
+                            "success",
+                        );
+                    } else {
+                        showAlert(
+                            `⚠️ Server error (status: ${response.status})`,
+                            "warning",
+                        );
+                        logToConsole(
+                            `Server error: ${response.status}`,
+                            "warning",
+                        );
+                    }
+                } catch (error) {
+                    logToConsole(
+                        `Server connection failed: ${error.message}`,
+                        "error",
+                    );
+                    showAlert(
+                        "❌ Cannot connect to server. Make sure it's running on localhost:3000",
+                        "error",
+                    );
+                }
+            }
+
+            async function testRegistration() {
+                const form = document.getElementById("debugForm");
+                const formData = new FormData(form);
+
+                logToConsole(
+                    "Starting registration test with current form data...",
+                );
+
+                // Validate passwords match
+                if (
+                    formData.get("password") !== formData.get("confirmPassword")
+                ) {
+                    logToConsole("Password mismatch detected", "error");
+                    showAlert("❌ Passwords do not match!", "error");
+                    return;
+                }
+
+                const userData = {
+                    firstName: formData.get("firstName").trim(),
+                    lastName: formData.get("lastName").trim(),
+                    email: formData.get("email").trim().toLowerCase(),
+                    password: formData.get("password"),
+                    birthDate: formData.get("birthDate"),
+                    country: formData.get("country"),
+                };
+
+                // Only add phone if it's not empty
+                const phone = formData.get("phone")?.trim();
+                if (phone) {
+                    userData.phone = phone;
+                }
+
+                logToConsole(
+                    `Registration data: ${JSON.stringify(userData, null, 2)}`,
+                );
+
+                try {
+                    if (!window.GamePlanAPI) {
+                        throw new Error("GamePlan API not loaded");
+                    }
+
+                    logToConsole("Calling registration API...");
+                    const response =
+                        await window.GamePlanAPI.register(userData);
+
+                    logToConsole(
+                        `Registration response: ${JSON.stringify(response, null, 2)}`,
+                        "success",
+                    );
+
+                    if (response.success) {
+                        showAlert("✅ Registration successful!", "success");
+                        logToConsole(
+                            "Registration completed successfully",
+                            "success",
+                        );
+
+                        if (response.data && response.data.user) {
+                            logToConsole(
+                                `User created: ${response.data.user.firstName} ${response.data.user.lastName} (${response.data.user.email})`,
+                            );
+                        }
+                    } else {
+                        logToConsole(
+                            `Registration failed: ${response.message}`,
+                            "error",
+                        );
+                        showAlert(
+                            `❌ Registration failed: ${response.message}`,
+                            "error",
+                        );
+                    }
+                } catch (error) {
+                    logToConsole(
+                        `Registration error: ${error.message}`,
+                        "error",
+                    );
+                    logToConsole(`Error stack: ${error.stack}`, "error");
+                    showAlert(
+                        `❌ Registration failed: ${error.message}`,
+                        "error",
+                    );
+                }
+            }
+
+            function testValidRegistration() {
+                // Set known good values with unique email
+                const timestamp = Date.now();
+                document.getElementById("firstName").value = "Maria";
+                document.getElementById("lastName").value = "Santos";
+                document.getElementById("email").value =
+                    `test.user.${timestamp}@example.com`;
+                document.getElementById("password").value = "ValidPass123!";
+                document.getElementById("confirmPassword").value =
+                    "ValidPass123!";
+                document.getElementById("birthDate").value = "1990-05-15";
+                document.getElementById("country").value = "PT";
+                document.getElementById("phone").value = ""; // Test without phone
+                document.getElementById("terms").checked = true;
+
+                logToConsole(
+                    `Set form with valid test data (email: test.user.${timestamp}@example.com)`,
+                );
+                showAlert("✅ Form filled with valid test data", "info");
+            }
+
+            function testInvalidData() {
+                // Set intentionally invalid values
+                document.getElementById("firstName").value = "A"; // Too short
+                document.getElementById("lastName").value = ""; // Empty
+                document.getElementById("email").value = "invalid-email";
+                document.getElementById("password").value = "123"; // Too weak
+                document.getElementById("confirmPassword").value = "different";
+                document.getElementById("birthDate").value = "2020-01-01"; // Too young
+                document.getElementById("country").value = "";
+                document.getElementById("phone").value = "invalid-phone-123";
+                document.getElementById("terms").checked = false;
+
+                logToConsole("Set form with invalid test data");
+                showAlert("⚠️ Form filled with invalid test data", "info");
+            }
+
+            // Initialize on page load
+            window.addEventListener("load", function () {
+                setTimeout(() => {
+                    logToConsole("Page loaded, checking system...");
+                    checkSystemStatus();
+                }, 500);
+            });
+        </script>
+    </body>
+</html>
