@@ -421,7 +421,6 @@ CREATE TABLE medical_records (
 -- User indexes
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_active ON users(is_active);
-CREATE INDEX idx_user_sessions_token ON user_sessions(session_token);
 CREATE INDEX idx_user_sessions_expires ON user_sessions(expires_at);
 
 -- Club indexes

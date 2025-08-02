@@ -1,0 +1,43 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1"/>
+            <stop offset="50%" style="stop-color:#4a90e2;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#2a5298;stop-opacity:1"/>
+        </linearGradient>
+        <linearGradient id="fieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95"/>
+            <stop offset="100%" style="stop-color:#f8f9fa;stop-opacity:0.9"/>
+        </linearGradient>
+    </defs>
+
+    <!-- Background with project's blue gradient -->
+    <rect width="120" height="120" rx="24" fill="url(#grad4)"/>
+
+    <!-- Campo simplificado -->
+    <rect x="20" y="25" width="80" height="70" rx="8" fill="url(#fieldGrad)" stroke="#4a90e2" stroke-width="0.5" opacity="0.9"/>
+
+    <!-- Formação 4-4-2 -->
+    <!-- Defesa (4) - Using primary blue -->
+    <circle cx="35" cy="80" r="3" fill="#4a90e2" stroke="#ffffff" stroke-width="0.5"/>
+    <circle cx="50" cy="80" r="3" fill="#4a90e2" stroke="#ffffff" stroke-width="0.5"/>
+    <circle cx="70" cy="80" r="3" fill="#4a90e2" stroke="#ffffff" stroke-width="0.5"/>
+    <circle cx="85" cy="80" r="3" fill="#4a90e2" stroke="#ffffff" stroke-width="0.5"/>
+
+    <!-- Meio campo (4) - Using secondary blue -->
+    <circle cx="35" cy="60" r="3" fill="#2a5298" stroke="#ffffff" stroke-width="0.5"/>
+    <circle cx="50" cy="55" r="3" fill="#2a5298" stroke="#ffffff" stroke-width="0.5"/>
+    <circle cx="70" cy="55" r="3" fill="#2a5298" stroke="#ffffff" stroke-width="0.5"/>
+    <circle cx="85" cy="60" r="3" fill="#2a5298" stroke="#ffffff" stroke-width="0.5"/>
+
+    <!-- Ataque (2) - Using accent purple-blue -->
+    <circle cx="50" cy="40" r="3" fill="#7b68ee" stroke="#ffffff" stroke-width="0.5"/>
+    <circle cx="70" cy="40" r="3" fill="#7b68ee" stroke="#ffffff" stroke-width="0.5"/>
+
+    <!-- GP Text with enhanced styling -->
+    <text x="60" y="108" font-family="Poppins, Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle" opacity="0.95">GP</text>
+
+    <!-- Subtle corner accent -->
+    <circle cx="100" cy="20" r="2" fill="#ffffff" opacity="0.2"/>
+    <circle cx="20" cy="100" r="2" fill="#ffffff" opacity="0.2"/>
+</svg>
